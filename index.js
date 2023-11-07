@@ -50,6 +50,20 @@ async function run() {
             const result = await jobsCollection.findOne(query);
             res.send(result)
         })
+        app.get('/jobs/posted', async (req, res) => {
+            const email = req.query.email;
+            console.log(email)
+            if (!email) {
+                res.send([])
+            }
+            const query = { email: email };
+            const result = await jobsCollection.find(query).toArray();
+            res.send(result);
+
+            // const query = { email: email }
+            // const result = await jobsCollection.find(query).toArray();
+            // res.send(result)
+        })
 
         app.post('/mybids', async (req, res) => {
             const data = req.body;
@@ -62,21 +76,7 @@ async function run() {
             res.send(result)
         })
 
-        app.get('/jobs/posted', async (req, res) => {
-            const email = req.query.email;
-            console.log(email)
-            if (!email) {
-                res.send([])
-            }
 
-            const query = { email: email };
-            const result = await jobsCollection.find(query).toArray();
-            res.send(result);
-
-            // const query = { email: email }
-            // const result = await jobsCollection.find(query).toArray();
-            // res.send(result)
-        })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
