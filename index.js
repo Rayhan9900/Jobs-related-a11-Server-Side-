@@ -88,6 +88,30 @@ async function run() {
             const result = await jobsCollection.insertOne(data);
             res.send(result)
         })
+        app.put('/jobs/:id', async (req, res) => {
+            const id = req.params.id;
+            const data = req.body;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updateJob = {
+                $set: {
+                    email: data.email,
+                    Jobtitle: data.Jobtitle,
+                    category: data.category,
+                    deadline: data.deadline,
+                    description: data.description,
+                    minimumPrice: data.minimumPrice,
+                    maximumPrice: data.maximumPrice
+
+                }
+            }
+            const result = await jobsCollection.updateOne(
+                filter,
+                options,
+                updateJob
+            )
+            res.send(result)
+        })
 
 
 
@@ -100,8 +124,6 @@ async function run() {
     }
 }
 run().catch(console.dir);
-
-
 
 app.get('/', (req, res) => {
     res.send('Jobs related server is running')
