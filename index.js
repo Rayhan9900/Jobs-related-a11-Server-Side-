@@ -36,7 +36,7 @@ async function run() {
 
 
         const jobsCollection = client.db('jobsDB').collection('jobs');
-        const bidsCollection = client.db('jobsDB').collection('dids');
+        const bidsCollection = client.db('jobsDB').collection('bids');
 
 
         app.get('/jobs', async (req, res) => {
@@ -50,19 +50,25 @@ async function run() {
             const result = await jobsCollection.findOne(query);
             res.send(result)
         })
-        app.get('/jobs/posted', async (req, res) => {
+        app.get('/jobs', async (req, res) => {
             const email = req.query.email;
-            console.log(email)
-            if (!email) {
-                res.send([])
-            }
             const query = { email: email };
             const result = await jobsCollection.find(query).toArray();
             res.send(result);
+        })
 
-            // const query = { email: email }
-            // const result = await jobsCollection.find(query).toArray();
-            // res.send(result)
+        app.get('/bids', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const result = await bidsCollection.find(query).toArray()
+            res.send(result)
+        })
+
+        app.get('/bids/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const result = await bidsCollection.find(query).toArray()
+            res.send(result)
         })
 
         app.post('/mybids', async (req, res) => {
