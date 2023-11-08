@@ -107,8 +107,9 @@ async function run() {
             }
             const result = await jobsCollection.updateOne(
                 filter,
-                options,
-                updateJob
+                updateJob,
+                options
+
             )
             res.send(result)
         })
