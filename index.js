@@ -37,6 +37,7 @@ async function run() {
 
         const jobsCollection = client.db('jobsDB').collection('jobs');
         const bidsCollection = client.db('jobsDB').collection('bids');
+        const clientsCollection = client.db('jobsDB').collection('clients');
 
 
         app.get('/jobs', async (req, res) => {
@@ -75,6 +76,12 @@ async function run() {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await jobsCollection.findOne(query)
+            res.send(result)
+        })
+
+        app.get('/clients', async (req, res) => {
+            const result = await clientsCollection.find().toArray();
+            console.log(result)
             res.send(result)
         })
 
