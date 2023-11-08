@@ -10,11 +10,8 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// jobsrelated
-// OImWWW3SdcOyX9uI
 
-console.log(process.env.USER_DB)
-console.log(process.env.PASS_DB)
+
 
 // const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = `mongodb+srv://${process.env.USER_DB}:${process.env.PASS_DB}@cluster0.lnrotgp.mongodb.net/?retryWrites=true&w=majority`;
@@ -102,12 +99,25 @@ async function run() {
             res.send(result)
         })
 
+
         app.patch('/bid-requests/reject/:id', async (req, res) => {
             const id = req.params.id;
             const bidId = { _id: new ObjectId(id) }
             const updateDoc = {
                 $set:
                     { status: 'canceled' }
+            }
+            const result = await bidsCollection.updateOne(bidId, updateDoc);
+            res.send(result)
+        })
+
+
+        app.patch('/bids/complete/:id', async (req, res) => {
+            const id = req.params.id;
+            const bidId = { _id: new ObjectId(id) }
+            const updateDoc = {
+                $set:
+                    { status: 'complete' }
             }
             const result = await bidsCollection.updateOne(bidId, updateDoc);
             res.send(result)
